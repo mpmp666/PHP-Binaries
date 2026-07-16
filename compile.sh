@@ -398,10 +398,10 @@ set -e
 echo -n "[PHP] downloading $PHP_VERSION..."
 
 if [[ "$PHP_IS_BETA" == "yes" ]]; then
-	download_file "https://www.php.net/distributions/php-$PHP_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+	download_file "https://www.php.net/distributions/php-$PHP_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 	mv php-$PHP_VERSION php
 else
-	download_file "https://www.php.net/distributions/php-$PHP_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+	download_file "https://www.php.net/distributions/php-$PHP_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 	mv php-$PHP_VERSION php
 fi
 
@@ -415,7 +415,7 @@ if [ "$COMPILE_FANCY" == "yes" ]; then
 	fi
 	#ncurses
 	echo -n "[ncurses] downloading $NCURSES_VERSION..."
-	download_file "http://ftp.gnu.org/gnu/ncurses/ncurses-$NCURSES_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+	download_file "http://ftp.gnu.org/gnu/ncurses/ncurses-$NCURSES_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 	mv ncurses-$NCURSES_VERSION ncurses
 	echo -n " checking..."
 	cd ncurses
@@ -447,7 +447,7 @@ if [ "$COMPILE_FANCY" == "yes" ]; then
 	#readline
 	set +e
 	echo -n "[readline] downloading $READLINE_VERSION..."
-	download_file "http://ftp.gnu.org/gnu/readline/readline-$READLINE_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+	download_file "http://ftp.gnu.org/gnu/readline/readline-$READLINE_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 	mv readline-$READLINE_VERSION readline
 	echo -n " checking..."
 	cd readline
@@ -484,7 +484,7 @@ fi
 
 #zlib
 echo -n "[zlib] downloading $ZLIB_VERSION..."
-download_file "https://github.com/madler/zlib/archive/v$ZLIB_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+download_file "https://github.com/madler/zlib/archive/v$ZLIB_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 mv zlib-$ZLIB_VERSION zlib
 echo -n " checking..."
 cd zlib
@@ -510,7 +510,7 @@ export ac_cv_func_realloc_0_nonnull=yes
 # [Genisys专用] 禁用 mcrypt: 2.5.8 老库现代GCC编不过, 且 Genisys 不需要
 # #mcrypt
 # echo -n "[mcrypt] downloading $LIBMCRYPT_VERSION..."
-# download_file "http://sourceforge.net/projects/mcrypt/files/Libmcrypt/$LIBMCRYPT_VERSION/libmcrypt-$LIBMCRYPT_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+# download_file "http://sourceforge.net/projects/mcrypt/files/Libmcrypt/$LIBMCRYPT_VERSION/libmcrypt-$LIBMCRYPT_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 # mv libmcrypt-$LIBMCRYPT_VERSION libmcrypt
 # echo -n " checking..."
 # cd libmcrypt
@@ -542,7 +542,7 @@ fi
 
 #GMP
 echo -n "[GMP] downloading $GMP_VERSION..."
-download_file "https://ftp.gnu.org/gnu/gmp/gmp-$GMP_VERSION.tar.bz2" | tar -jx >> "$DIR/install.log" 2>&1
+download_file "https://ftp.gnu.org/gnu/gmp/gmp-$GMP_VERSION.tar.bz2" | tar -jx >> "$DIR/install.log" 2>&1 || exit 1
 mv gmp-$GMP_VERSION_DIR gmp
 echo -n " checking..."
 cd gmp
@@ -570,7 +570,7 @@ echo " done!"
 # 
 # 	#mbed TLS
 # 	echo -n "[mbed TLS] downloading $MBEDTLS_VERSION..."
-# 	download_file "https://tls.mbed.org/download/mbedtls-${MBEDTLS_VERSION}-gpl.tgz" | tar -zx >> "$DIR/install.log" 2>&1
+# 	download_file "https://tls.mbed.org/download/mbedtls-${MBEDTLS_VERSION}-gpl.tgz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 # 	mv mbedtls-${MBEDTLS_VERSION} mbedtls
 # 	echo -n " checking..."
 # 	cd mbedtls
@@ -596,7 +596,7 @@ else
 
 	#curl
 	echo -n "[cURL] downloading $CURL_VERSION..."
-	download_file "https://github.com/bagder/curl/archive/$CURL_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+	download_file "https://github.com/bagder/curl/archive/$CURL_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 	mv curl-$CURL_VERSION curl
 	echo -n " checking..."
 	cd curl
@@ -639,13 +639,13 @@ fi
 
 #bcompiler
 #echo -n "[bcompiler] downloading $BCOMPILER_VERSION..."
-#download_file "http://pecl.php.net/get/bcompiler-$BCOMPILER_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1
+#download_file "http://pecl.php.net/get/bcompiler-$BCOMPILER_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 #mv bcompiler-$BCOMPILER_VERSION "$DIR/install_data/php/ext/bcompiler"
 #echo " done!"
 
 #PHP ncurses
 #echo -n "[PHP ncurses] downloading $PHPNCURSES_VERSION..."
-#download_file "http://pecl.php.net/get/ncurses-$PHPNCURSES_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1
+#download_file "http://pecl.php.net/get/ncurses-$PHPNCURSES_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 #mv ncurses-$PHPNCURSES_VERSION "$DIR/install_data/php/ext/ncurses"
 #echo " done!"
 
@@ -658,12 +658,12 @@ fi
 #YAML
 echo -n "[YAML] downloading $YAML_VERSION..."
 if [ "$COMPILE_FOR_ANDROID" == "yes" ]; then
-	download_file "https://github.com/yaml/libyaml/archive/$YAML_VERSION_ANDROID.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+	download_file "https://github.com/yaml/libyaml/archive/$YAML_VERSION_ANDROID.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 	mv libyaml-$YAML_VERSION yaml
 	cd yaml
 	./bootstrap >> "$DIR/install.log" 2>&1
 else
-	download_file "https://pyyaml.org/download/libyaml/yaml-$YAML_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+	download_file "https://pyyaml.org/download/libyaml/yaml-$YAML_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 	mv yaml-$YAML_VERSION yaml
 	cd yaml
 fi
@@ -687,8 +687,8 @@ echo " done!"
 if [ "$COMPILE_LEVELDB" == "yes" ]; then
 	#LevelDB
 	echo -n "[LevelDB] downloading $LEVELDB_VERSION..."
-	download_file "https://github.com/PocketMine/leveldb/archive/$LEVELDB_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
-	#download_file "https://github.com/Mojang/leveldb-mcpe/archive/$LEVELDB_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+	download_file "https://github.com/PocketMine/leveldb/archive/$LEVELDB_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
+	#download_file "https://github.com/Mojang/leveldb-mcpe/archive/$LEVELDB_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 	mv leveldb-$LEVELDB_VERSION leveldb
 	echo -n " checking..."
 	cd leveldb
@@ -712,29 +712,29 @@ if [ "$DO_STATIC" == "yes" ]; then
 else
 	EXTRA_FLAGS="--enable-shared=yes --enable-static=no"
 fi
-
-#libpng
-echo -n "[libpng] downloading $LIBPNG_VERSION..."
-download_file "https://sourceforge.net/projects/libpng/files/libpng16/$LIBPNG_VERSION/libpng-$LIBPNG_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
-mv libpng-$LIBPNG_VERSION libpng
-echo -n " checking..."
-cd libpng
-LDFLAGS="$LDFLAGS -L${DIR}/bin/php7/lib" CPPFLAGS="$CPPFLAGS -I${DIR}/bin/php7/include" RANLIB=$RANLIB ./configure \
---prefix="$DIR/bin/php7" \
-$EXTRA_FLAGS \
-$CONFIGURE_FLAGS >> "$DIR/install.log" 2>&1
-echo -n " compiling..."
-make -j $THREADS >> "$DIR/install.log" 2>&1
-echo -n " installing..."
-make install >> "$DIR/install.log" 2>&1
-echo -n " cleaning..."
-cd ..
-rm -r -f ./libpng
-echo " done!"
+# 
+# #libpng
+# echo -n "[libpng] downloading $LIBPNG_VERSION..."
+# download_file "https://sourceforge.net/projects/libpng/files/libpng16/$LIBPNG_VERSION/libpng-$LIBPNG_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
+# mv libpng-$LIBPNG_VERSION libpng
+# echo -n " checking..."
+# cd libpng
+# LDFLAGS="$LDFLAGS -L${DIR}/bin/php7/lib" CPPFLAGS="$CPPFLAGS -I${DIR}/bin/php7/include" RANLIB=$RANLIB ./configure \
+# --prefix="$DIR/bin/php7" \
+# $EXTRA_FLAGS \
+# $CONFIGURE_FLAGS >> "$DIR/install.log" 2>&1
+# echo -n " compiling..."
+# make -j $THREADS >> "$DIR/install.log" 2>&1
+# echo -n " installing..."
+# make install >> "$DIR/install.log" 2>&1
+# echo -n " cleaning..."
+# cd ..
+# rm -r -f ./libpng
+# echo " done!"
 
 #libxml2
 #echo -n "[libxml2] downloading $LIBXML_VERSION..."
-#download_file "ftp://xmlsoft.org/libxml2/libxml2-$LIBXML_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+#download_file "ftp://xmlsoft.org/libxml2/libxml2-$LIBXML_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 #mv libxml2-$LIBXML_VERSION libxml2
 #echo -n " checking..."
 #cd libxml2
@@ -763,7 +763,7 @@ echo " done!"
 if [[ "$DO_STATIC" != "yes" ]] && [[ "$COMPILE_DEBUG" == "yes" ]]; then
 	#xdebug
 	echo -n "[PHP xdebug] downloading $XDEBUG_VERSION..."
-	download_file "http://pecl.php.net/get/xdebug-$XDEBUG_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1
+	download_file "http://pecl.php.net/get/xdebug-$XDEBUG_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 	mv xdebug-$XDEBUG_VERSION "$DIR/install_data/php/ext/xdebug"
 	echo " done!"
 	HAS_XDEBUG="--enable-xdebug=shared"
@@ -775,7 +775,7 @@ fi
 #if [ "$COMPILE_DEBUG" == "yes" ]; then
 #	#profiler
 #	echo -n "[PHP profiler] downloading latest..."
-#	download_file "https://github.com/krakjoe/profiler/archive/master.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+#	download_file "https://github.com/krakjoe/profiler/archive/master.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 #	mv profiler-master "$DIR/install_data/php/ext/profiler"
 #	echo " done!"
 #	HAS_PROFILER="--enable-profiler --with-profiler-max-frames=1000"
@@ -785,8 +785,8 @@ fi
 
 #pthreads
 echo -n "[PHP pthreads] downloading $PTHREADS_VERSION..."
-download_file "https://pecl.php.net/get/pthreads-$PTHREADS_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1
-#download_file "https://github.com/krakjoe/pthreads/archive/$PTHREADS_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+download_file "https://pecl.php.net/get/pthreads-$PTHREADS_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
+#download_file "https://github.com/krakjoe/pthreads/archive/$PTHREADS_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 mv pthreads-$PTHREADS_VERSION "$DIR/install_data/php/ext/pthreads"
 echo " done!"
 
@@ -802,29 +802,29 @@ fi
 
 #uopz
 #echo -n "[PHP uopz] downloading $UOPZ_VERSION..."
-#download_file "http://pecl.php.net/get/uopz-$UOPZ_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1
+#download_file "http://pecl.php.net/get/uopz-$UOPZ_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 #mv uopz-$UOPZ_VERSION "$DIR/install_data/php/ext/uopz"
 #echo " done!"
 
 #WeakRef
 echo -n "[PHP Weakref] downloading $WEAKREF_VERSION..."
-download_file "http://pecl.php.net/get/Weakref-$WEAKREF_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1
+download_file "http://pecl.php.net/get/Weakref-$WEAKREF_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 mv Weakref-$WEAKREF_VERSION "$DIR/install_data/php/ext/weakref"
 echo " done!"
 
 #PHP YAML
 echo -n "[PHP YAML] downloading $PHPYAML_VERSION..."
-#download_file "http://pecl.php.net/get/yaml-$PHPYAML_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1
+#download_file "http://pecl.php.net/get/yaml-$PHPYAML_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 #mv yaml-$PHPYAML_VERSION "$DIR/install_data/php/ext/yaml"
-download_file "https://github.com/php/pecl-file_formats-yaml/archive/$PHPYAML_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+download_file "https://github.com/php/pecl-file_formats-yaml/archive/$PHPYAML_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 mv pecl-file_formats-yaml-$PHPYAML_VERSION "$DIR/install_data/php/ext/yaml"
 echo " done!"
 
 if [ "$COMPILE_LEVELDB" == "yes" ]; then
 	#PHP LevelDB
 	echo -n "[PHP LevelDB] downloading $PHPLEVELDB_VERSION..."
-	#download_file "http://pecl.php.net/get/leveldb-$PHPLEVELDB_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1
-	download_file "https://github.com/PocketMine/php-leveldb/archive/$PHPLEVELDB_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+	#download_file "http://pecl.php.net/get/leveldb-$PHPLEVELDB_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
+	download_file "https://github.com/PocketMine/php-leveldb/archive/$PHPLEVELDB_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1 || exit 1
 	mv php-leveldb-$PHPLEVELDB_VERSION "$DIR/install_data/php/ext/leveldb"
 	echo " done!"
 	HAS_LEVELDB=--with-leveldb="$DIR/bin/php7"
@@ -894,9 +894,9 @@ RANLIB=$RANLIB CFLAGS="$CFLAGS $FLAGS_LTO" LDFLAGS="$LDFLAGS $FLAGS_LTO" ./confi
 --with-zlib-dir="$DIR/bin/php7" \
 #--with-mcrypt (disabled: Genisys not needed, breaks modern GCC) \
 --with-gmp="$DIR/bin/php7" \
---with-png-dir="$DIR/bin/php7" \
+#--with-png-dir (disabled: libpng off, Genisys not needed) \
 --with-yaml="$DIR/bin/php7" \
---with-gd \
+#--with-gd (disabled: libpng off, Genisys not needed) \
 $HAVE_NCURSES \
 $HAVE_READLINE \
 $HAS_LEVELDB \
