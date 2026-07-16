@@ -661,7 +661,10 @@ else
 --enable-sockets \
 $HAVE_PCNTL \
 $HAVE_MYSQLI \
-$CONFIGURE_FLAGS >> "$DIR/install.log" 2>&1
+# disabled for Genisys 0.14.3 (not needed):
+# --with-mcrypt, --with-gmp, --with-png-dir, --with-gd
+# $HAVE_NCURSES, $HAVE_READLINE, $HAS_LEVELDB, $HAS_POCKETMINE
+# $HAS_XDEBUG, $HAS_PROFILER, $HAS_DEBUG
 # disabled for Genisys 0.14.3 (not needed):
 # --with-mcrypt, --with-gmp, --with-png-dir, --with-gd
 # $HAVE_NCURSES, $HAVE_READLINE, $HAS_LEVELDB, $HAS_POCKETMINE
