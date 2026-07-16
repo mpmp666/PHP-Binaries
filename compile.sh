@@ -493,30 +493,31 @@ export ac_cv_func_malloc_0_nonnull=yes
 export jm_cv_func_working_realloc=yes
 export ac_cv_func_realloc_0_nonnull=yes
 
-#mcrypt
-echo -n "[mcrypt] downloading $LIBMCRYPT_VERSION..."
-download_file "http://sourceforge.net/projects/mcrypt/files/Libmcrypt/$LIBMCRYPT_VERSION/libmcrypt-$LIBMCRYPT_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
-mv libmcrypt-$LIBMCRYPT_VERSION libmcrypt
-echo -n " checking..."
-cd libmcrypt
-rm -f config.guess
-download_file "http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD" > config.guess
-rm -f config.sub
-download_file "http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD" > config.sub
-RANLIB=$RANLIB ./configure --prefix="$DIR/bin/php7" \
---disable-posix-threads \
---enable-static \
---disable-shared \
-$CONFIGURE_FLAGS >> "$DIR/install.log" 2>&1
-sed -i=".backup" 's,/* #undef malloc */,#undef malloc,' config.h
-sed -i=".backup" 's,/* #undef realloc */,#undef realloc,' config.h
-echo -n " compiling..."
-make -j $THREADS >> "$DIR/install.log" 2>&1
-echo -n " installing..."
-make install >> "$DIR/install.log" 2>&1
-echo -n " cleaning..."
-cd ..
-rm -r -f ./libmcrypt
+# [Genisys专用] 禁用 mcrypt: 2.5.8 老库现代GCC编不过, 且 Genisys 不需要
+# #mcrypt
+# echo -n "[mcrypt] downloading $LIBMCRYPT_VERSION..."
+# download_file "http://sourceforge.net/projects/mcrypt/files/Libmcrypt/$LIBMCRYPT_VERSION/libmcrypt-$LIBMCRYPT_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+# mv libmcrypt-$LIBMCRYPT_VERSION libmcrypt
+# echo -n " checking..."
+# cd libmcrypt
+# rm -f config.guess
+# download_file "http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD" > config.guess
+# rm -f config.sub
+# download_file "http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD" > config.sub
+# RANLIB=$RANLIB ./configure --prefix="$DIR/bin/php7" \
+# --disable-posix-threads \
+# --enable-static \
+# --disable-shared \
+# $CONFIGURE_FLAGS >> "$DIR/install.log" 2>&1
+# sed -i=".backup" 's,/* #undef malloc */,#undef malloc,' config.h
+# sed -i=".backup" 's,/* #undef realloc */,#undef realloc,' config.h
+# echo -n " compiling..."
+# make -j $THREADS >> "$DIR/install.log" 2>&1
+# echo -n " installing..."
+# make install >> "$DIR/install.log" 2>&1
+# echo -n " cleaning..."
+# cd ..
+# rm -r -f ./libmcrypt
 echo " done!"
 
 if [ "$IS_CROSSCOMPILE" == "yes" ]; then
@@ -877,7 +878,7 @@ RANLIB=$RANLIB CFLAGS="$CFLAGS $FLAGS_LTO" LDFLAGS="$LDFLAGS $FLAGS_LTO" ./confi
 --with-curl="$HAVE_CURL" \
 --with-zlib="$DIR/bin/php7" \
 --with-zlib-dir="$DIR/bin/php7" \
---with-mcrypt="$DIR/bin/php7" \
+#--with-mcrypt (disabled: Genisys not needed, breaks modern GCC) \
 --with-gmp="$DIR/bin/php7" \
 --with-png-dir="$DIR/bin/php7" \
 --with-yaml="$DIR/bin/php7" \
