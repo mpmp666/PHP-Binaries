@@ -1,0 +1,90 @@
+name: Build Genisys 0.14.3 PHP 7.0.14
+
+on:
+  workflow_dispatch:
+    inputs:
+      php_version:
+        description: 'PHP version to build (default 7.0.14 for Genisys 0.14.3)'
+        required: false
+        default: '7.0.14'
+      targets:
+        description: 'Comma-separated targets: armv7,x86_64,aarch64'
+        required: false
+        default: 'armv7,x86_64,aarch64'
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [armv7, x86_64, aarch64]
+    steps:
+      - name: Checkout (Genisys 0.14.3 PHP 7.0 build branch)
+        uses: actions/checkout@v4
+        with:
+          ref: genisys-php
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            make automake autoconf libtool pkg-config bison re2c \
+            libxml2-dev libcurl4-openssl-dev libssl-dev zlib1g-dev libyaml-dev \
+            wget curl ca-certificates
+
+      - name: Install cross toolchains (armv7 / aarch64)
+        if: matrix.target == 'armv7' || matrix.target == 'aarch64'
+        run: |
+          if [ "${{ matrix.target }}" = "armv7" ]; then
+            sudo apt-get install -y -qq gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+          fi
+          if [ "${{ matrix.target }}" = "aarch64" ]; then
+            sudo apt-get install -y -qq gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+          fi
+
+      - name: Set cross-compile env
+        if: matrix.target == 'armv7' || matrix.target == 'aarch64'
+        run: |
+          if [ "${{ matrix.target }}" = "armv7" ]; then
+            echo "CC=arm-linux-gnueabihf-gcc" >> "$GITHUB_ENV"
+            echo "CXX=arm-linux-gnueabihf-g++" >> "$GITHUB_ENV"
+            echo "RANLIB=arm-linux-gnueabihf-ranlib" >> "$GITHUB_ENV"
+            echo "AR=arm-linux-gnueabihf-ar" >> "$GITHUB_ENV"
+            echo "TARGET_ARG=armv7" >> "$GITHUB_ENV"
+          else
+            echo "CC=aarch64-linux-gnu-gcc" >> "$GITHUB_ENV"
+            echo "CXX=aarch64-linux-gnu-g++" >> "$GITHUB_ENV"
+            echo "RANLIB=aarch64-linux-gnu-ranlib" >> "$GITHUB_ENV"
+            echo "AR=aarch64-linux-gnu-ar" >> "$GITHUB_ENV"
+            echo "TARGET_ARG=aarch64" >> "$GITHUB_ENV"
+          fi
+
+      - name: Set native env (x86_64)
+        if: matrix.target == 'x86_64'
+        run: echo "TARGET_ARG=x86_64" >> "$GITHUB_ENV"
+
+      - name: Build PHP ${{ github.event.inputs.php_version }} for ${{ matrix.target }}
+        env:
+          PHP_VERSION: ${{ github.event.inputs.php_version }}
+        run: |
+          chmod +x compile.sh
+          ./compile.sh -t "$TARGET_ARG" 2>&1 | tee build.log
+          echo "=== build done, checking binary ==="
+          ls -la bin/php7/bin/php 2>&1 || { echo "BUILD FAILED"; tail -50 build.log; exit 1; }
+          file bin/php7/bin/php
+
+      - name: Pack artifact
+        run: |
+          cd bin
+          tar -czf "php7-${{ matrix.target }}.tar.gz" php7
+          cd ..
+          ls -la "bin/php7-${{ matrix.target }}.tar.gz"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: php7-${{ matrix.target }}
+          path: bin/php7-${{ matrix.target }}.tar.gz
+          if-no-files-found: error
