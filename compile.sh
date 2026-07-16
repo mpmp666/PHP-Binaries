@@ -275,7 +275,7 @@ elif [ "$COMPILE_TARGET" == "rpi" ]; then
 elif [ "$COMPILE_TARGET" == "armv7" ]; then
 	[ -z "$march" ] && march=armv7-a;
 	[ -z "$mtune" ] && mtune=cortex-a8;
-	CFLAGS="$CFLAGS -mfpu=vfp";
+	# [Genisys专用] 去掉 -mfpu=vfp: 交叉编译时 configure 会把全局CFLAGS传给宿主gcc探测测试导致 unrecognized option
 	echo "[INFO] Compiling for ARMv7"
 elif [[ "$COMPILE_TARGET" == "mac" ]] || [[ "$COMPILE_TARGET" == "mac32" ]]; then
 	[ -z "$march" ] && march=prescott;
@@ -832,6 +832,8 @@ rm -f ./aclocal.m4 >> "$DIR/install.log" 2>&1
 rm -rf ./autom4te.cache/ >> "$DIR/install.log" 2>&1
 rm -f ./configure >> "$DIR/install.log" 2>&1
 ./buildconf --force >> "$DIR/install.log" 2>&1
+	# [Genisys专用] PHP7.0 configure 老脚本用 -Werror 卡现代gcc警告, 清掉
+	if [ -f ./configure ]; then sed -i 's/-Werror//g' ./configure; fi
 if [ "$IS_CROSSCOMPILE" == "yes" ]; then
 	sed -i=".backup" 's/pthreads_working=no/pthreads_working=yes/' ./configure
 	if [ "$IS_WINDOWS" != "yes" ]; then
