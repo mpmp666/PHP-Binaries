@@ -55,11 +55,25 @@ type g++ >> "$DIR/install.log" 2>&1 || { echo >&2 "[ERROR] Please install \"g++\
 shopt -s expand_aliases
 type wget >> "$DIR/install.log" 2>&1
 if [ $? -eq 0 ]; then
-	alias download_file="wget --no-check-certificate -q -O -"
+	download_file(){
+		local url="$1" tries=0
+		while [ $tries -lt 4 ]; do
+			wget --no-check-certificate --tries=3 --timeout=60 -q -O - "$url" && return 0
+			tries=$((tries+1)); sleep 3
+		done
+		return 1
+	}
 else
 	type curl >> "$DIR/install.log" 2>&1
 	if [ $? -eq 0 ]; then
-		alias download_file="curl --insecure --silent --location"
+	download_file(){
+		local url="$1" tries=0
+		while [ $tries -lt 4 ]; do
+			curl --insecure --silent --location --retry 3 --retry-delay 3 --connect-timeout 60 "$url" && return 0
+			tries=$((tries+1)); sleep 3
+		done
+		return 1
+	}
 	else
 		echo "error, curl or wget not found"
 	fi
@@ -528,7 +542,7 @@ fi
 
 #GMP
 echo -n "[GMP] downloading $GMP_VERSION..."
-download_file "https://gmplib.org/download/gmp/gmp-$GMP_VERSION.tar.bz2" | tar -jx >> "$DIR/install.log" 2>&1
+download_file "https://ftp.gnu.org/gnu/gmp/gmp-$GMP_VERSION.tar.bz2" | tar -jx >> "$DIR/install.log" 2>&1
 mv gmp-$GMP_VERSION_DIR gmp
 echo -n " checking..."
 cd gmp
