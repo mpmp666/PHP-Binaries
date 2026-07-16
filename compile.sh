@@ -893,7 +893,7 @@ RANLIB=$RANLIB CFLAGS="$CFLAGS $FLAGS_LTO" LDFLAGS="$LDFLAGS $FLAGS_LTO" ./confi
 --with-zlib="$DIR/bin/php7" \
 --with-zlib-dir="$DIR/bin/php7" \
 #--with-mcrypt (disabled: Genisys not needed, breaks modern GCC) \
---with-gmp="$DIR/bin/php7" \
+#--with-gmp (disabled: Genisys not needed) \
 #--with-png-dir (disabled: libpng off, Genisys not needed) \
 --with-yaml="$DIR/bin/php7" \
 #--with-gd (disabled: libpng off, Genisys not needed) \
