@@ -76,9 +76,12 @@ jobs:
         env:
           PHP_VERSION: ${{ github.event.inputs.php_version }}
           THREADS: "1"
+          # armv7/aarch64 需要 -x 触发交叉编译分支 + 非空 CFLAGS 避免 compile.sh 加 -uclibc
+          CROSS_ARG: ${{ matrix.target == 'x86_64' && '' || '-x' }}
+          CFLAGS: ${{ matrix.target == 'x86_64' && '' || '-O2 -fPIC' }}
         run: |
           chmod +x compile.sh
-          ./compile.sh -t "$TARGET_ARG" 2>&1 | tee build.log
+          ./compile.sh -t "$TARGET_ARG" $CROSS_ARG 2>&1 | tee build.log
           echo "=== build.log tail (last 80 lines) ==="
           tail -80 build.log
           echo "=== check binary ==="
