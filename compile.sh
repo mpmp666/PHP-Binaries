@@ -547,15 +547,14 @@ cd ..
 rm -r -f ./gmp
 echo " done!"
 
-if [ "$(uname -s)" != "Darwin" ] || [ "$IS_CROSSCOMPILE" == "yes" ] || [ "$COMPILE_CURL" == "yes" ]; then
-	#if [ "$DO_STATIC" == "yes" ]; then
-	#	EXTRA_FLAGS=""
-	#else
-	#	EXTRA_FLAGS="shared no-static"
-	#fi
-
-	# [Genisys专用] 禁用 mbedTLS: 2.2.1 老库现代GCC编不过且Genisys不需要
-# #mbed TLS
+# if [ "$(uname -s)" != "Darwin" ] || [ "$IS_CROSSCOMPILE" == "yes" ] || [ "$COMPILE_CURL" == "yes" ]; then
+# 	#if [ "$DO_STATIC" == "yes" ]; then
+# 	#	EXTRA_FLAGS=""
+# 	#else
+# 	#	EXTRA_FLAGS="shared no-static"
+# 	#fi
+# 
+# 	#mbed TLS
 # 	echo -n "[mbed TLS] downloading $MBEDTLS_VERSION..."
 # 	download_file "https://tls.mbed.org/download/mbedtls-${MBEDTLS_VERSION}-gpl.tgz" | tar -zx >> "$DIR/install.log" 2>&1
 # 	mv mbedtls-${MBEDTLS_VERSION} mbedtls
@@ -570,7 +569,7 @@ if [ "$(uname -s)" != "Darwin" ] || [ "$IS_CROSSCOMPILE" == "yes" ] || [ "$COMPI
 # 	cd ..
 # 	rm -r -f ./mbedtls
 # 	echo " done!"
-fi
+# fi
 
 if [ "$(uname -s)" == "Darwin" ] && [ "$IS_CROSSCOMPILE" != "yes" ] && [ "$COMPILE_CURL" != "yes" ]; then
    HAVE_CURL="shared,/usr"
@@ -608,7 +607,7 @@ else
 	--without-libidn \
 	--with-zlib="$DIR/bin/php7" \
 	--without-ssl \
-	#--with-mbedtls (disabled: Genisys not needed, breaks modern GCC) \
+	--with-mbedtls="$DIR/bin/php7" \
 	--enable-threaded-resolver \
 	--prefix="$DIR/bin/php7" \
 	$EXTRA_FLAGS \
