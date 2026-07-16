@@ -239,6 +239,13 @@ if [ "$IS_CROSSCOMPILE" == "yes" ]; then
 		CONFIGURE_FLAGS="--host=$TOOLCHAIN_PREFIX"
 		[ -z "$CFLAGS" ] && CFLAGS="-uclibc";
 		echo "[INFO] Cross-compiling for ARMv7"
+	elif [ "$COMPILE_TARGET" == "aarch64" ]; then
+		TOOLCHAIN_PREFIX="aarch64-linux-gnu"
+		[ -z "$march" ] && march=armv8-a;
+		[ -z "$mtune" ] && mtune=cortex-a53;
+		CONFIGURE_FLAGS="--host=$TOOLCHAIN_PREFIX"
+		[ -z "$CFLAGS" ] && CFLAGS="-O2 -fPIC";
+		echo "[INFO] Cross-compiling for AArch64"
 	elif [ "$COMPILE_TARGET" == "mac" ]; then
 		[ -z "$march" ] && march=prescott;
 		[ -z "$mtune" ] && mtune=generic;
