@@ -892,18 +892,7 @@ RANLIB=$RANLIB CFLAGS="$CFLAGS $FLAGS_LTO" LDFLAGS="$LDFLAGS $FLAGS_LTO" ./confi
 --with-curl="$HAVE_CURL" \
 --with-zlib="$DIR/bin/php7" \
 --with-zlib-dir="$DIR/bin/php7" \
-#--with-mcrypt (disabled: Genisys not needed, breaks modern GCC) \
-#--with-gmp (disabled: Genisys not needed) \
-#--with-png-dir (disabled: libpng off, Genisys not needed) \
 --with-yaml="$DIR/bin/php7" \
-#--with-gd (disabled: libpng off, Genisys not needed) \
-$HAVE_NCURSES \
-$HAVE_READLINE \
-$HAS_LEVELDB \
-$HAS_POCKETMINE \
-$HAS_XDEBUG \
-$HAS_PROFILER \
-$HAS_DEBUG \
 --enable-mbstring \
 --enable-calendar \
 --enable-pthreads \
@@ -924,6 +913,17 @@ $HAS_DEBUG \
 --enable-phar \
 --enable-ctype \
 --enable-sockets \
+#--with-mcrypt disabled: Genisys not needed, breaks modern GCC
+#--with-gmp disabled: Genisys not needed
+#--with-png-dir disabled: libpng off
+#--with-gd disabled: libpng off
+#$HAVE_NCURSES disabled: Genisys not needed
+#$HAVE_READLINE disabled: Genisys not needed
+#$HAS_LEVELDB disabled: Genisys not needed
+#$HAS_POCKETMINE disabled: Genisys not needed
+#$HAS_XDEBUG disabled: Genisys not needed
+#$HAS_PROFILER disabled: Genisys not needed
+#$HAS_DEBUG disabled: Genisys not needed
 --enable-shared=no \
 --enable-static=yes \
 --enable-shmop \
