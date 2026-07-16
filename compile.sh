@@ -619,9 +619,10 @@ else
 	--disable-ldap \
 	--disable-ldaps \
 	--without-libidn \
---without-ssl \
---without-gnutls \
---without-nss \
+	--prefix="$DIR/bin/php7" \
+	--without-ssl \
+	--without-gnutls \
+	--without-nss \
 --with-zlib="$DIR/bin/php7" \
 --with-zlib-dir="$DIR/bin/php7" \
 --with-yaml="$DIR/bin/php7" \
