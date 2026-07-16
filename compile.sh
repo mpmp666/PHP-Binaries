@@ -619,13 +619,49 @@ else
 	--disable-ldap \
 	--disable-ldaps \
 	--without-libidn \
-	--with-zlib="$DIR/bin/php7" \
-	--without-ssl \
-	--with-mbedtls="$DIR/bin/php7" \
-	--enable-threaded-resolver \
-	--prefix="$DIR/bin/php7" \
-	$EXTRA_FLAGS \
-	$CONFIGURE_FLAGS >> "$DIR/install.log" 2>&1
+--with-zlib="$DIR/bin/php7" \
+--with-zlib-dir="$DIR/bin/php7" \
+--with-yaml="$DIR/bin/php7" \
+--with-curl="$HAVE_CURL" \
+--enable-mbstring \
+--enable-calendar \
+--enable-pthreads \
+--enable-shared=no \
+--enable-static=yes \
+--enable-shmop \
+--enable-maintainer-zts \
+--disable-short-tags \
+--enable-bcmath \
+--enable-cli \
+--enable-zip \
+--enable-ftp \
+--with-zend-vm=$ZEND_VM \
+--enable-opcache=yes \
+--enable-weakref \
+--disable-fileinfo \
+--disable-libxml \
+--disable-xml \
+--disable-dom \
+--disable-simplexml \
+--disable-xmlreader \
+--disable-xmlwriter \
+--disable-cgi \
+--disable-session \
+--disable-pdo \
+--without-pear \
+--without-iconv \
+--without-pdo-sqlite \
+--with-pic \
+--enable-phar \
+--enable-ctype \
+--enable-sockets \
+$HAVE_PCNTL \
+$HAVE_MYSQLI \
+$CONFIGURE_FLAGS >> "$DIR/install.log" 2>&1
+# disabled for Genisys 0.14.3 (not needed):
+# --with-mcrypt, --with-gmp, --with-png-dir, --with-gd
+# $HAVE_NCURSES, $HAVE_READLINE, $HAS_LEVELDB, $HAS_POCKETMINE
+# $HAS_XDEBUG, $HAS_PROFILER, $HAS_DEBUG
 	echo -n " compiling..."
 	make -j $THREADS >> "$DIR/install.log" 2>&1
 	echo -n " installing..."
