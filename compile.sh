@@ -1,4 +1,7 @@
 #!/bin/bash
+# [Genisys 0.14.3 专用] 现代工具链容错: 老 PHP7.0 源码在 GCC11+ 下 implicit-decl/implicit-int 被当 error, 关闭之
+export CFLAGS="$CFLAGS -Wno-error -Wno-implicit-function-declaration -Wno-implicit-int"
+export CXXFLAGS="$CXXFLAGS -Wno-error"
 [ -z "$PHP_VERSION" ] && PHP_VERSION="7.0.14"
 
 PHP_IS_BETA="no"
@@ -381,10 +384,10 @@ set -e
 echo -n "[PHP] downloading $PHP_VERSION..."
 
 if [[ "$PHP_IS_BETA" == "yes" ]]; then
-	download_file "https://downloads.php.net/~ab/php-$PHP_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+	download_file "https://www.php.net/distributions/php-$PHP_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
 	mv php-$PHP_VERSION php
 else
-	download_file "http://php.net/get/php-$PHP_VERSION.tar.gz/from/this/mirror" | tar -zx >> "$DIR/install.log" 2>&1
+	download_file "https://www.php.net/distributions/php-$PHP_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
 	mv php-$PHP_VERSION php
 fi
 
@@ -645,7 +648,7 @@ if [ "$COMPILE_FOR_ANDROID" == "yes" ]; then
 	cd yaml
 	./bootstrap >> "$DIR/install.log" 2>&1
 else
-	download_file "http://pyyaml.org/download/libyaml/yaml-$YAML_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
+	download_file "https://pyyaml.org/download/libyaml/yaml-$YAML_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
 	mv yaml-$YAML_VERSION yaml
 	cd yaml
 fi
@@ -767,7 +770,7 @@ fi
 
 #pthreads
 echo -n "[PHP pthreads] downloading $PTHREADS_VERSION..."
-download_file "http://pecl.php.net/get/pthreads-$PTHREADS_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1
+download_file "https://pecl.php.net/get/pthreads-$PTHREADS_VERSION.tgz" | tar -zx >> "$DIR/install.log" 2>&1
 #download_file "https://github.com/krakjoe/pthreads/archive/$PTHREADS_VERSION.tar.gz" | tar -zx >> "$DIR/install.log" 2>&1
 mv pthreads-$PTHREADS_VERSION "$DIR/install_data/php/ext/pthreads"
 echo " done!"
