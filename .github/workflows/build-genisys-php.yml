@@ -72,7 +72,7 @@ jobs:
         run: echo "TARGET_ARG=x86_64" >> "$GITHUB_ENV"
 
       - name: Build PHP ${{ github.event.inputs.php_version }} for ${{ matrix.target }}
-        timeout-minutes: 25
+        timeout-minutes: 15
         env:
           PHP_VERSION: ${{ github.event.inputs.php_version }}
           THREADS: "1"

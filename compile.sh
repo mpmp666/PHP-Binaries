@@ -554,21 +554,22 @@ if [ "$(uname -s)" != "Darwin" ] || [ "$IS_CROSSCOMPILE" == "yes" ] || [ "$COMPI
 	#	EXTRA_FLAGS="shared no-static"
 	#fi
 
-	#mbed TLS
-	echo -n "[mbed TLS] downloading $MBEDTLS_VERSION..."
-	download_file "https://tls.mbed.org/download/mbedtls-${MBEDTLS_VERSION}-gpl.tgz" | tar -zx >> "$DIR/install.log" 2>&1
-	mv mbedtls-${MBEDTLS_VERSION} mbedtls
-	echo -n " checking..."
-	cd mbedtls
-	sed -i=".backup" 's,DESTDIR=/usr/local,,g' Makefile
-	echo -n " compiling..."
-	DESTDIR="$DIR/bin/php7" RANLIB=$RANLIB make -j $THREADS lib >> "$DIR/install.log" 2>&1
-	echo -n " installing..."
-	DESTDIR="$DIR/bin/php7" make install >> "$DIR/install.log" 2>&1
-	echo -n " cleaning..."
-	cd ..
-	rm -r -f ./mbedtls
-	echo " done!"
+	# [Genisys专用] 禁用 mbedTLS: 2.2.1 老库现代GCC编不过且Genisys不需要
+# #mbed TLS
+# 	echo -n "[mbed TLS] downloading $MBEDTLS_VERSION..."
+# 	download_file "https://tls.mbed.org/download/mbedtls-${MBEDTLS_VERSION}-gpl.tgz" | tar -zx >> "$DIR/install.log" 2>&1
+# 	mv mbedtls-${MBEDTLS_VERSION} mbedtls
+# 	echo -n " checking..."
+# 	cd mbedtls
+# 	sed -i=".backup" 's,DESTDIR=/usr/local,,g' Makefile
+# 	echo -n " compiling..."
+# 	DESTDIR="$DIR/bin/php7" RANLIB=$RANLIB make -j $THREADS lib >> "$DIR/install.log" 2>&1
+# 	echo -n " installing..."
+# 	DESTDIR="$DIR/bin/php7" make install >> "$DIR/install.log" 2>&1
+# 	echo -n " cleaning..."
+# 	cd ..
+# 	rm -r -f ./mbedtls
+# 	echo " done!"
 fi
 
 if [ "$(uname -s)" == "Darwin" ] && [ "$IS_CROSSCOMPILE" != "yes" ] && [ "$COMPILE_CURL" != "yes" ]; then
@@ -607,7 +608,7 @@ else
 	--without-libidn \
 	--with-zlib="$DIR/bin/php7" \
 	--without-ssl \
-	--with-mbedtls="$DIR/bin/php7" \
+	#--with-mbedtls (disabled: Genisys not needed, breaks modern GCC) \
 	--enable-threaded-resolver \
 	--prefix="$DIR/bin/php7" \
 	$EXTRA_FLAGS \
