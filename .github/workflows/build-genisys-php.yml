@@ -30,9 +30,15 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq \
-            make automake autoconf libtool libtool-bin pkg-config bison re2c \
+            make automake autoconf autoconf2.69 libtool libtool-bin pkg-config bison re2c m4 \
             libxml2-dev libcurl4-openssl-dev libssl-dev zlib1g-dev libyaml-dev \
             wget curl ca-certificates
+
+      - name: Pin autoconf to 2.69 (PHP 7.0 buildconf rejects >2.69)
+        run: |
+          sudo update-alternatives --install /usr/bin/autoconf autoconf /usr/bin/autoconf2.69 100
+          sudo update-alternatives --set autoconf /usr/bin/autoconf2.69
+          autoconf --version | head -1
 
       - name: Install cross toolchains (armv7 / aarch64)
         if: matrix.target == 'armv7' || matrix.target == 'aarch64'
